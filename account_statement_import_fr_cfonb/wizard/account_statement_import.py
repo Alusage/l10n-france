@@ -55,7 +55,9 @@ class AccountStatementImport(models.TransientModel):
             amount_str[-1] in debit_trans or amount_str[-1] in credit_trans
         ), "Invalid amount in CFONB file"
         if amount_str[-1] in debit_trans:
-            amount_num = float("-" + amount_str[:-1] + debit_trans[amount_str[-1]])
+            amount_num = float(
+                "-" + amount_str[:-1] + debit_trans[amount_str[-1]]
+            )
         elif amount_str[-1] in credit_trans:
             amount_num = float(amount_str[:-1] + credit_trans[amount_str[-1]])
         return amount_num
@@ -86,7 +88,16 @@ class AccountStatementImport(models.TransientModel):
         for line in lines:
             i += 1
             _logger.debug("Line %d: %s" % (i, line))
-            assert len(line) == CFONB_WIDTH
+            if not line:
+                continue
+            if len(line) != CFONB_WIDTH:
+                raise UserError(
+                    _(
+                        "Line %d is %d caracters long. All lines of a "
+                        "CFONB bank statement file must be 120 caracters long."
+                    )
+                    % (i, len(line))
+                )
             rec_type = line[0:2]
             bank_code = line[2:7]
             guichet_code = line[11:16]
@@ -160,8 +171,7 @@ class AccountStatementImport(models.TransientModel):
                 # too long labels with too much "pollution"
                 transactions[-1]["unique_import_id"] += complementary_info
                 if (
-                    complementary_info_type
-                    in self._get_allow_cfonb_complementary_types()
+                    complementary_info_type in ("   ", "LIB")
                     and complementary_info
                 ):
                     transactions[-1]["payment_ref"] += " " + complementary_info
@@ -174,7 +184,11 @@ class AccountStatementImport(models.TransientModel):
         for rdict in result.values():
             if rdict["transactions"]:
                 res.append(
-                    (rdict.pop("currency_code"), rdict.pop("account_number"), [rdict])
+                    (
+                        rdict.pop("currency_code"),
+                        rdict.pop("account_number"),
+                        [rdict],
+                    )
                 )
         return res
 
@@ -209,7 +223,9 @@ class AccountStatementImport(models.TransientModel):
         # is a newline there or not.
 
         # remove linebreaks
-        data_file_without_linebreaks = data_file.replace("\n", "").replace("\r", "")
+        data_file_without_linebreaks = data_file.replace("\n", "").replace(
+            "\r", ""
+        )
 
         # check length of file
         max_len = len(data_file_without_linebreaks)
@@ -222,5 +238,7 @@ class AccountStatementImport(models.TransientModel):
             raise UserError(_("The file is empty."))
         for index in range(0, max_len, CFONB_WIDTH):
             # append a 120 char slice of the file to the list of lines
-            lines.append(data_file_without_linebreaks[index : index + CFONB_WIDTH])
+            lines.append(
+                data_file_without_linebreaks[index : index + CFONB_WIDTH]
+            )
         return lines
