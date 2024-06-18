@@ -76,6 +76,12 @@ class AccountFrFecOca(models.TransientModel):
         string="Field Delimiter",
         required=True,
     )
+    journal_ids = fields.Many2many(
+        "account.journal",
+        string="Journals",
+        check_company=True,
+        domain="[('company_id', '=', company_id)]",
+    )
     partner_option = fields.Selection(
         [
             ("receivable_payable", "Receivable and Payable Accounts"),
@@ -643,6 +649,8 @@ class AccountFrFecOca(models.TransientModel):
 
         @return the value of the file
         """
+        journal_obj = self.env['account.journal']
+        company = self.company_id
         encoding = self.encoding
         delimiter = self.delimiter == "tab" and "\t" or self.delimiter
         with StringIO() as fecfile:
@@ -651,11 +659,13 @@ class AccountFrFecOca(models.TransientModel):
                 delimiter=delimiter,
                 lineterminator="\r\n",
             )
+            journal_filter_code = self.journal_ids.mapped('code')
             for row in rows:
-                if encoding == "ascii":
-                    for j, _cell_content in enumerate(row):
-                        row[j] = unidecode(row[j])
-                writer.writerow(row)
+                if not journal_filter_code or row[0] == 'JournalCode' or ( journal_filter_code and row[0] in journal_filter_code):
+                    if encoding == "ascii":
+                        for j, _cell_content in enumerate(row):
+                            row[j] = unidecode(row[j])
+                    writer.writerow(row)
 
             fecvalue = fecfile.getvalue()
         return fecvalue

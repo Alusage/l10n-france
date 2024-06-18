@@ -16,6 +16,7 @@
                 <field name="export_type" />
                 <field name="encoding" />
                 <field name="delimiter" />
+                <field name="journal_ids" string="Journaux à exporter" widget="many2many_tags" />
                 <field name="partner_option" widget="radio" />
                 <field
                         name="partner_account_ids"
