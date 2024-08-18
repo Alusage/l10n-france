@@ -649,8 +649,7 @@ class AccountFrFecOca(models.TransientModel):
 
         @return the value of the file
         """
-        journal_obj = self.env['account.journal']
-        company = self.company_id
+
         encoding = self.encoding
         delimiter = self.delimiter == "tab" and "\t" or self.delimiter
         with StringIO() as fecfile:
@@ -659,9 +658,18 @@ class AccountFrFecOca(models.TransientModel):
                 delimiter=delimiter,
                 lineterminator="\r\n",
             )
-            journal_filter_code = self.journal_ids.mapped('code')
+            journal_filter_code = self.journal_ids.mapped("code")
             for row in rows:
-                if not journal_filter_code or row[0] == 'JournalCode' or ( journal_filter_code and row[0] in journal_filter_code):
+                if (
+                    not journal_filter_code
+                    or row[0] == "JournalCode"
+                    or (journal_filter_code and row[0] in journal_filter_code)
+                ):
+                    if row[0] == "CA":
+                        row[4] = "512202000"
+                    # Add credit coopératif
+                    if row[0] == "BNK2":
+                        row[4] = "512205000"
                     if encoding == "ascii":
                         for j, _cell_content in enumerate(row):
                             row[j] = unidecode(row[j])
