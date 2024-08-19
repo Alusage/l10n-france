@@ -667,9 +667,8 @@ class AccountFrFecOca(models.TransientModel):
                 ):
                     if row[0] == "CA":
                         row[4] = "512202000"
-                    # Add credit coopératif
-                    if row[0] == "BNK2":
-                        row[4] = "512205000"
+                    if row[0] == "CCOOP":
+                        row[4] = "512201000"
                     if encoding == "ascii":
                         for j, _cell_content in enumerate(row):
                             row[j] = unidecode(row[j])
