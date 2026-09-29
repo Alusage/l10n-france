@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id/id,operation,domain
+access_l10n_fr_das2,Full access to l10n.fr.das2 to accountant,model_l10n_fr_das2,account.group_account_user,crud,
+access_l10n_fr_das2_read,Read access to l10n.fr.das2 to auditor,model_l10n_fr_das2,account.group_account_readonly,r,
+access_l10n_fr_das2_line,Full access to l10n.fr.das2.line to accoutant,model_l10n_fr_das2_line,account.group_account_user,crud,
+access_l10n_fr_das2_line_read,Read access to l10n.fr.das2.line to auditor,model_l10n_fr_das2_line,account.group_account_readonly,r,
+l10n_fr_das2_rule,DAS2 multi-company,model_l10n_fr_das2,,crud,"[('company_id', 'in', company_ids)]"
+l10n_fr_das2_line_rule,DAS2 Line multi-company,model_l10n_fr_das2_line,,crud,"[('company_id', 'in', company_ids)]"
