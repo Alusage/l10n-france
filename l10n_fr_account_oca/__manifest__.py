@@ -1,6 +1,6 @@
 {
     "name": "France - OCA Chart of Account",
-    "version": "18.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Accounting/Localizations/Account Charts",
     "summary": "Fork of l10n_fr_account: fewer taxes, ready for FR OCA VAT return",
     "author": "Akretion,Odoo SA,Odoo Community Association (OCA)",
