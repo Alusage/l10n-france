@@ -4,7 +4,7 @@
 
 {
     "name": "France VAT Return",
-    "version": "18.0.2.0.1",
+    "version": "20.0.2.0.1",
     "category": "Accounting",
     "license": "AGPL-3",
     "summary": "VAT return for France: CA3, 3310-A, 3519",
@@ -15,7 +15,7 @@
     # there is a bug in pypdf 4.2.0 which trigger a crash in PDF generation
     "external_dependencies": {"python": ["pypdf>=4.3.0", "xlsxwriter"]},
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "security/ir_rule.xml",
         "wizards/l10n_fr_vat_exigibility_update_view.xml",
         "wizards/res_config_settings.xml",

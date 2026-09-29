@@ -768,7 +768,7 @@ class ResCompany(models.Model):
                 "purchase_ok": True,
                 "taxes_id": sale_tax_ids,
                 "supplier_taxes_id": purchase_tax_ids,
-                "categ_id": self.env.ref("product.product_category_all").id,
+                "categ_id": self.env.ref("product.product_category_goods").id,
                 "property_account_income_id": account_income_id,
                 "company_id": self.id,
             }
@@ -812,7 +812,7 @@ class ResCompany(models.Model):
                 "sale_ok": False,
                 "purchase_ok": True,
                 "supplier_taxes_id": [Command.set([royalty_tax.id])],
-                "categ_id": self.env.ref("product.product_category_all").id,
+                "categ_id": self.env.ref("product.product_category_goods").id,
                 "company_id": self.id,
             }
         )
