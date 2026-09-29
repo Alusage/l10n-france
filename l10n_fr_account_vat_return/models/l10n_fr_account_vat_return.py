@@ -623,9 +623,11 @@ class L10nFrAccountVatReturn(models.Model):
         }
         for tax in autoliq_vat_taxes:
             lines = tax.invoice_repartition_line_ids.filtered(
-                lambda x: x.repartition_type == "tax"
-                and x.account_id
-                and int(x.factor_percent) == -100
+                lambda x: (
+                    x.repartition_type == "tax"
+                    and x.account_id
+                    and int(x.factor_percent) == -100
+                )
             )
             if len(lines) != 1:
                 raise UserError(
@@ -736,14 +738,18 @@ class L10nFrAccountVatReturn(models.Model):
         for candidate_tax in candidate_taxes:
             rate_int = int(round(candidate_tax.amount * 10))
             regular_inv_lines = candidate_tax.invoice_repartition_line_ids.filtered(
-                lambda x: x.repartition_type == "tax"
-                and x.account_id
-                and int(round(x.factor_percent)) == 100
+                lambda x: (
+                    x.repartition_type == "tax"
+                    and x.account_id
+                    and int(round(x.factor_percent)) == 100
+                )
             )
             neg92_inv_lines = candidate_tax.invoice_repartition_line_ids.filtered(
-                lambda x: x.repartition_type == "tax"
-                and x.account_id
-                and int(round(x.factor_percent)) == -92
+                lambda x: (
+                    x.repartition_type == "tax"
+                    and x.account_id
+                    and int(round(x.factor_percent)) == -92
+                )
             )
             if (
                 len(regular_inv_lines) == 1
@@ -1255,7 +1261,7 @@ class L10nFrAccountVatReturn(models.Model):
         else:
             # rate push boxes that can be found in 3310A
             amount = int(round(push_rate * cur_amount / 100))
-            note = f"{push_rate} % x " f"{cur_amount} €, " f"{box.display_name}"
+            note = f"{push_rate} % x {cur_amount} €, {box.display_name}"
         # prepare new log line
         account_id = False
         if push_box.accounting_method:
@@ -1295,7 +1301,7 @@ class L10nFrAccountVatReturn(models.Model):
             ("box_edi_type", "=", "MOA"),
         ]
 
-        for push_seq in sequences.keys():
+        for push_seq in sequences:
             # Get lines that must generate/update a new line
             to_push_lines = speedy["line_obj"].search(
                 [("box_push_sequence", "=", push_seq)] + to_push_lines_base_domain
@@ -1506,9 +1512,11 @@ class L10nFrAccountVatReturn(models.Model):
         )
         for tax in regular_due_vat_taxes:
             invoice_lines = tax.invoice_repartition_line_ids.filtered(
-                lambda x: x.repartition_type == "tax"
-                and x.account_id
-                and int(x.factor_percent) == 100
+                lambda x: (
+                    x.repartition_type == "tax"
+                    and x.account_id
+                    and int(x.factor_percent) == 100
+                )
             )
             if len(invoice_lines) != 1:
                 raise UserError(
@@ -1715,7 +1723,7 @@ class L10nFrAccountVatReturn(models.Model):
         vat_group_rate2box = {}
         for key_vat_group in speedy["vat_groups"]:
             vat_group_rate2box[key_vat_group] = {}  # {2000: box_rec, 1000, box_rec}
-        for vat_group in vat_group_rate2box.keys():
+        for vat_group in vat_group_rate2box:
             boxes = speedy["box_obj"].search(
                 [
                     ("meaning_id", "=like", f"due_vat_{vat_group}_%"),
@@ -1971,8 +1979,7 @@ class L10nFrAccountVatReturn(models.Model):
             ):
                 amount = speedy["currency"].round(line.balance) * vat_sign
                 note = _(
-                    "%(invoice)s (%(partner)s) is unpaid, "
-                    "Unpaid VAT amount %(amount)s",
+                    "%(invoice)s (%(partner)s) is unpaid, Unpaid VAT amount %(amount)s",
                     invoice=unpaid_inv.name,
                     partner=unpaid_inv.commercial_partner_id.display_name,
                     amount=format_amount(self.env, amount, speedy["currency"]),
@@ -2045,8 +2052,9 @@ class L10nFrAccountVatReturn(models.Model):
             if not move.currency_id.is_zero(unpaid_amount):
                 unpaid_ratio = unpaid_amount / move.amount_total
                 for line in move.line_ids.filtered(
-                    lambda x: x.display_type == "tax"
-                    and x.account_id.id in vat_account_ids
+                    lambda x: (
+                        x.display_type == "tax" and x.account_id.id in vat_account_ids
+                    )
                 ):
                     balance = line.balance * vat_sign
                     if fully_unpaid:
@@ -2154,9 +2162,11 @@ class L10nFrAccountVatReturn(models.Model):
         )
         for tax in deduc_vat_taxes:
             line = tax.invoice_repartition_line_ids.filtered(
-                lambda x: x.repartition_type == "tax"
-                and x.account_id
-                and int(x.factor_percent) == 100
+                lambda x: (
+                    x.repartition_type == "tax"
+                    and x.account_id
+                    and int(x.factor_percent) == 100
+                )
             )
             if len(line) != 1:
                 logger.debug(
@@ -2217,8 +2227,10 @@ class L10nFrAccountVatReturn(models.Model):
         for fpositions, box_meaning_id in fpositions2box_meaning_id.items():
             for fposition in fpositions:
                 revenue_account_mappings = fposition.account_ids.filtered(
-                    lambda x: x.account_src_id.account_type in sale_account_types
-                    and x.account_dest_id.account_type in sale_account_types
+                    lambda x: (
+                        x.account_src_id.account_type in sale_account_types
+                        and x.account_dest_id.account_type in sale_account_types
+                    )
                 )
                 if not revenue_account_mappings:
                     if fposition.fr_vat_type == "france_exo":

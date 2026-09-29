@@ -42,9 +42,11 @@ class AccountTax(models.Model):
                 # repartition lines should be the same as invoice repartition lines.
                 # If it's not the case, it will raise in manual2auto()
                 lines = tax.invoice_repartition_line_ids.filtered(
-                    lambda x: x.repartition_type == "tax"
-                    and x.account_id
-                    and x.factor_percent
+                    lambda x: (
+                        x.repartition_type == "tax"
+                        and x.account_id
+                        and x.factor_percent
+                    )
                 )
                 if len(lines) == 2:
                     total = 0.0
