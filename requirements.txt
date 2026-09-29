@@ -2,3 +2,5 @@
 pypdf>=4.3.0
 xlsxwriter
 requests_oauthlib
+pyfrdas2>=0.10
+python-stdnum
