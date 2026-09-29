@@ -111,7 +111,7 @@ class ChorusFlow(models.Model):
             ):
                 for error in answer["listeErreurTechnique"]:
                     i += 1
-                    notes += "Erreur technique %d :\n" "  Libellé erreur : %s\n" % (
+                    notes += "Erreur technique %d :\n  Libellé erreur : %s\n" % (
                         i,
                         error.get("libelleErreur"),
                     )
@@ -246,10 +246,7 @@ class ChorusFlow(models.Model):
             if flow.invoice_identifiers:
                 if raise_if_ko:
                     raise UserError(
-                        _(
-                            "The Chorus Invoice Identifiers are already set "
-                            "for flow %s."
-                        )
+                        _("The Chorus Invoice Identifiers are already set for flow %s.")
                         % flow.name
                     )
                 logger.warning(

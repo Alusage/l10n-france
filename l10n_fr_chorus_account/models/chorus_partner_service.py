@@ -110,8 +110,7 @@ class ChorusPartnerService(models.Model):
                     )
                 else:
                     logger.warning(
-                        "Skipping service %s of partner %s: missing "
-                        "Chorus identifier",
+                        "Skipping service %s of partner %s: missing Chorus identifier",
                         service.display_name,
                         partner.display_name,
                     )

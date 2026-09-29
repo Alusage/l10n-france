@@ -225,7 +225,7 @@ class ResCompany(models.Model):
         # {'access_token': 'xxxxxxxxxxxxxxxxx',
         # 'token_type': 'Bearer', 'expires_in': 3600, 'scope': 'openid'}
         logger.info(
-            "New token retreived with a validity of " "%d seconds",
+            "New token retreived with a validity of %d seconds",
             token.get("expires_in"),
         )
         seconds = int(token.get("expires_in")) - MARGIN_TOKEN_EXPIRY_SECONDS

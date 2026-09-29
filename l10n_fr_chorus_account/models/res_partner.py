@@ -435,7 +435,6 @@ class ResPartner(models.Model):
         self.fr_chorus_services_get()
         for partner in self:
             partner.fr_chorus_service_ids.service_update()
-        return
 
     @api.model
     def chorus_cron(self):

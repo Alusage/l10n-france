@@ -176,8 +176,10 @@ class AccountMove(models.Model):
     def _post(self, soft=True):
         """Check validity of Chorus invoices"""
         for move in self.filtered(
-            lambda x: x.move_type in ("out_invoice", "out_refund")
-            and x.invoice_sending_method == "fr_chorus"
+            lambda x: (
+                x.move_type in ("out_invoice", "out_refund")
+                and x.invoice_sending_method == "fr_chorus"
+            )
         ):
             move._chorus_validation_checks()
         return super()._post(soft=soft)
