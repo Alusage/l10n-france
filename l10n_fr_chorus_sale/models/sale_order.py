@@ -22,8 +22,10 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         """Check validity of Chorus orders"""
         for order in self.filtered(
-            lambda x: x.partner_invoice_id.commercial_partner_id.invoice_sending_method
-            == "fr_chorus"
+            lambda x: (
+                x.partner_invoice_id.commercial_partner_id.invoice_sending_method
+                == "fr_chorus"
+            )
         ):
             order._chorus_validation_checks()
         return super().action_confirm()
