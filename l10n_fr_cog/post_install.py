@@ -33,4 +33,3 @@ def set_fr_cog(env):
             xmlid,
             fr_cog,
         )
-    return
