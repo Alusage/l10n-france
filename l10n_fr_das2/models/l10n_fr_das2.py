@@ -28,7 +28,7 @@ except (OSError, ImportError):
 LOGLEVELS = {
     "debug": logging.DEBUG,
     "info": logging.INFO,
-    "warn": logging.WARN,
+    "warn": logging.WARNING,
     "error": logging.ERROR,
 }
 
@@ -242,7 +242,6 @@ class L10nFrDas2(models.Model):
                 }
             )
         self.write(vals)
-        return
 
     def back2draft(self):
         self.ensure_one()
@@ -252,7 +251,6 @@ class L10nFrDas2(models.Model):
         if self.unencrypted_attachment_id:
             self.unencrypted_attachment_id.unlink()
         self.write({"state": "draft"})
-        return
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_state_done(self):
