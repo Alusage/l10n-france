@@ -1,0 +1,2 @@
+- Alexis de Lattre \<<alexis.delattre@akretion.com>\>
+- Nicolas Jeudy \<<support@alusage.fr>\>
