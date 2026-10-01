@@ -97,40 +97,38 @@ class L10nFrAccountVatBox(models.Model):
     push_box_2_id = fields.Many2one("l10n.fr.account.vat.box", readonly=True)
     push_rate_2 = fields.Float(digits=(16, PUSH_RATE_PRECISION), readonly=True)
 
-    _sql_constraints = [
-        ("sequence_unique", "unique(sequence)", "This sequence already exists."),
-        (
-            "code_form_unique",
-            "unique(form_code, code)",
-            "This code already exists for this form.",
-        ),
-        (
-            "edi_code_form_unique",
-            "unique(form_code, edi_code)",
-            "This EDI code already exists for this form.",
-        ),
-        ("nref_code_unique", "unique(nref_code)", "This N-REF code already exists."),
-        (
-            "meaning_id_unique",
-            "unique(meaning_id)",
-            "This meaningful ID already exists.",
-        ),
-        (
-            "due_vat_rate_positive",
-            "CHECK(due_vat_rate >= 0)",
-            "The Due VAT rate must be positive.",
-        ),
-        (
-            "due_vat_rate_max",
-            "CHECK(due_vat_rate < 10000)",
-            "The Due VAT rate must be under 10000.",
-        ),
-        (
-            "unique_page_x_y",
-            "unique(print_page, print_x, print_y)",
-            "There is already a box at this position!",
-        ),
-    ]
+    _sequence_unique = models.Constraint(
+        'unique(sequence)',
+        "This sequence already exists.",
+    )
+    _code_form_unique = models.Constraint(
+        'unique(form_code, code)',
+        "This code already exists for this form.",
+    )
+    _edi_code_form_unique = models.Constraint(
+        'unique(form_code, edi_code)',
+        "This EDI code already exists for this form.",
+    )
+    _nref_code_unique = models.Constraint(
+        'unique(nref_code)',
+        "This N-REF code already exists.",
+    )
+    _meaning_id_unique = models.Constraint(
+        'unique(meaning_id)',
+        "This meaningful ID already exists.",
+    )
+    _due_vat_rate_positive = models.Constraint(
+        'CHECK(due_vat_rate >= 0)',
+        "The Due VAT rate must be positive.",
+    )
+    _due_vat_rate_max = models.Constraint(
+        'CHECK(due_vat_rate < 10000)',
+        "The Due VAT rate must be under 10000.",
+    )
+    _unique_page_x_y = models.Constraint(
+        'unique(print_page, print_x, print_y)',
+        "There is already a box at this position!",
+    )
 
     @api.onchange("display_type")
     def display_type_change(self):

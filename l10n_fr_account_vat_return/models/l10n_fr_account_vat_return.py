@@ -216,18 +216,14 @@ class L10nFrAccountVatReturn(models.Model):
         "ir.attachment", readonly=True, string="Data Sent via the Gateway"
     )
 
-    _sql_constraints = [
-        (
-            "start_company_uniq",
-            "unique(start_date, company_id)",
-            "A VAT return with the same start date already exists in this company!",
-        ),
-        (
-            "deductible_vat_zip_other_threshold_positive",
-            "CHECK(deductible_vat_zip_other_threshold >= 0)",
-            "The threshold to provide non-asset invoices in ZIP must be positive.",
-        ),
-    ]
+    _start_company_uniq = models.Constraint(
+        'unique(start_date, company_id)',
+        "A VAT return with the same start date already exists in this company!",
+    )
+    _deductible_vat_zip_other_threshold_positive = models.Constraint(
+        'CHECK(deductible_vat_zip_other_threshold >= 0)',
+        "The threshold to provide non-asset invoices in ZIP must be positive.",
+    )
 
     @api.model
     def _reimbursement_type_selection(self):
@@ -3105,9 +3101,10 @@ class L10nFrAccountVatReturnLine(models.Model):
     # all types (adding € sign for MOA) and be used in tree view
     # but the content would be aligned on the right => not so good idea...
 
-    _sql_constraints = [
-        ("unique_return_box", "unique(parent_id, box_id)", "This line already exists!")
-    ]
+    _unique_return_box = models.Constraint(
+        'unique(parent_id, box_id)',
+        "This line already exists!",
+    )
 
     @api.depends("box_id")
     def _compute_manual_account_id(self):
@@ -3387,10 +3384,7 @@ class L10nFrAccountVatReturnUnpaidVatOnPaymentManualLine(models.Model):
     )
     note = fields.Char()
 
-    _sql_constraints = [
-        (
-            "parent_account_uniq",
-            "unique(parent_id, account_id)",
-            "This manual unpaid VAT on payment line already exists.",
-        )
-    ]
+    _parent_account_uniq = models.Constraint(
+        'unique(parent_id, account_id)',
+        "This manual unpaid VAT on payment line already exists.",
+    )

@@ -54,13 +54,10 @@ class ChorusPartnerService(models.Model):
             name = f"[{service.code}] {service.name or '-'}"
             service.display_name = name
 
-    _sql_constraints = [
-        (
-            "partner_code_uniq",
-            "unique(partner_id, code)",
-            "This Chorus service code already exists for that partner!",
-        )
-    ]
+    _partner_code_uniq = models.Constraint(
+        'unique(partner_id, code)',
+        "This Chorus service code already exists for that partner!",
+    )
 
     def _is_service_ok(self):
         if not self:
