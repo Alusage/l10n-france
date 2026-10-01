@@ -396,18 +396,15 @@ class ResCompany(models.Model):
         # field tax_exigibility is set to True by the loading of CoA
         company.write({"tax_exigibility": False})
         company.tax_cash_basis_journal_id.unlink()
-        bank = self.env["res.bank"].create(
-            {
-                "name": "Qonto",
-                "bic": "QNTOFRP1XXX",
-            }
-        )
+        # Odoo 20 dropped the res.bank model: res.partner.bank carries the
+        # bank name and BIC as plain char fields.
         self.env["res.partner.bank"].create(
             {
-                "acc_number": "FR4712122323343445455656676",
+                "account_number": "FR4712122323343445455656676",
                 "partner_id": company.partner_id.id,
                 "company_id": company.id,
-                "bank_id": bank.id,
+                "bank_name": "Qonto",
+                "bank_bic": "QNTOFRP1XXX",
                 "allow_out_payment": True,
             }
         )

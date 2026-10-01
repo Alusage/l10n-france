@@ -154,7 +154,8 @@ class L10nFrDas2(models.Model):
     )
     attachment_id = fields.Many2one("ir.attachment", readonly=True)
     attachment_datas = fields.Binary(
-        related="attachment_id.datas", string="Declaration File"
+        # Odoo 20 dropped ir.attachment.datas; raw carries the bytes.
+        related="attachment_id.raw", string="Declaration File"
     )
     attachment_name = fields.Char(related="attachment_id.name", string="Filename")
     unencrypted_attachment_id = fields.Many2one(

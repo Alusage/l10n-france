@@ -19,14 +19,16 @@
                 /> has/have the same <b>SIREN</b>.
                 </div>
             </div>
-            <field
-                name="company_registry"
-                invisible="not l10n_fr_is_french"
-                position="attributes"
-            >
-                <attribute name="string">SIREN or SIRET</attribute>
-                <attribute name="placeholder">33417522100012</attribute>
-            </field>
+            <!-- Odoo 20 dropped res.partner.company_registry from base: the field is
+                 declared by this module, so the form must add it instead of restyling
+                 an inherited one. -->
+            <xpath expr="//div[@name='identifiers']/div[@id='vat_div']" position="after">
+                <label for="company_registry" string="SIREN or SIRET"
+                       invisible="not is_france_country"/>
+                <field name="company_registry" nolabel="1"
+                       placeholder="33417522100012"
+                       invisible="not is_france_country"/>
+            </xpath>
         </field>
     </record>
 </odoo>

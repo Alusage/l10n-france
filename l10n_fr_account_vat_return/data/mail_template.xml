@@ -29,7 +29,7 @@
                     t-out="object.fr_vat_remind_deadline_day"
                 /> of the month.</p>
 
-                <t t-if="ctx.get('delta_days') > 0">
+                <t t-if="ctx.get('delta_days', 0) > 0">
                     <p>
                         <strong>Only <t
                             t-out="ctx.get('delta_days')"

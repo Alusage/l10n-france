@@ -222,12 +222,12 @@ class AccountMove(models.Model):
                             company=self.company_id.display_name,
                         )
                     )
-                if partner_bank_id.acc_type != "iban":
+                if partner_bank_id.account_type != "iban":
                     raise UserError(
                         _(
                             "Chorus Pro only accepts IBAN. But the bank account "
-                            "'%(acc_number)s' of %(company)s is not an IBAN.",
-                            acc_number=partner_bank_id.acc_number,
+                            "'%(account_number)s' of %(company)s is not an IBAN.",
+                            account_number=partner_bank_id.account_number,
                             company=self.company_id.display_name,
                         )
                     )

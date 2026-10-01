@@ -19,7 +19,10 @@ class AccountChartTemplate(models.AbstractModel):
             "categ_e": self.env.ref("account_tax_unece.tax_categ_e").id,
         }
         res = {}
-        tax_data = self._parse_csv("fr", "account.tax")
+        # Odoo 20 marks the "fr" template visible=False (it is a parent of
+        # fr_comp/fr_asso), so _get_chart_template_mapping() no longer returns it.
+        # Naming the module skips that lookup.
+        tax_data = self._parse_csv("fr", "account.tax", module="l10n_fr_account")
         for tax_xmlid in tax_data.keys():
             res[tax_xmlid] = {
                 "unece_type_id": xmlid2id["type_vat"],

@@ -148,7 +148,8 @@ class L10nFrAccountVatReturn(models.Model):
     )
     ca3_attachment_id = fields.Many2one("ir.attachment", string="CA3 Attachment")
     ca3_attachment_datas = fields.Binary(
-        related="ca3_attachment_id.datas", string="CA3 File"
+        # Odoo 20 dropped ir.attachment.datas; raw carries the bytes.
+        related="ca3_attachment_id.raw", string="CA3 File"
     )
     ca3_attachment_name = fields.Char(
         related="ca3_attachment_id.name", string="CA3 Filename"
@@ -195,7 +196,8 @@ class L10nFrAccountVatReturn(models.Model):
         "ir.attachment", string="Deductible VAT ZIP Attachment"
     )
     deductible_vat_zip_file_datas = fields.Binary(
-        related="deductible_vat_zip_file_id.datas", string="Deductible VAT ZIP File"
+        # Odoo 20 dropped ir.attachment.datas; raw carries the bytes.
+        related="deductible_vat_zip_file_id.raw", string="Deductible VAT ZIP File"
     )
     deductible_vat_zip_file_name = fields.Char(
         related="deductible_vat_zip_file_id.name", string="Deductible VAT ZIP Filename"
@@ -2819,7 +2821,7 @@ class L10nFrAccountVatReturn(models.Model):
         accounts = aao.search(
             [
                 ("company_ids", "in", company_id),
-                ("deprecated", "=", False),
+                ("active", "=", True),
                 ("code", "=like", box.account_code + "%"),
             ]
         )
@@ -3084,7 +3086,7 @@ class L10nFrAccountVatReturnLine(models.Model):
         readonly=False,
         store=True,
         precompute=True,
-        domain="[('company_ids', 'in', company_id), ('deprecated', '=', False)]",
+        domain="[('company_ids', 'in', company_id), ('active', '=', True)]",
     )
     manual_analytic_distribution = fields.Json(
         string="Analytic",
@@ -3303,7 +3305,8 @@ class L10nFrAccountVatReturnAutoliqLine(models.Model):
     partner_id = fields.Many2one(related="move_line_id.partner_id", store=True)
     account_id = fields.Many2one(related="move_line_id.account_id", store=True)
     ref = fields.Char(related="move_id.ref", store=True)
-    label = fields.Char(related="move_line_id.name", store=True)
+    # Odoo 20 retyped account.move.line.name from Char to Text.
+    label = fields.Text(related="move_line_id.name", store=True)
     company_currency_id = fields.Many2one(
         related="move_line_id.company_currency_id", store=True
     )

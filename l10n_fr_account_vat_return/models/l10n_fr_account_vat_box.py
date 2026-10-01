@@ -80,7 +80,7 @@ class L10nFrAccountVatBox(models.Model):
     account_id = fields.Many2one(
         "account.account",
         company_dependent=True,
-        domain="[('deprecated', '=', False), "
+        domain="[('active', '=', True), "
         "('company_ids', 'in', current_company_id)]",
         help="If not set, Odoo will use the first account that starts with the "
         "Generic Account Code. If set, Odoo will ignore the Generic Account Code "

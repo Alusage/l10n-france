@@ -12,9 +12,7 @@
     "website": "https://github.com/OCA/l10n-france",
     "license": "AGPL-3",
     "depends": ["l10n_fr_siret", "l10n_fr_account"],
-    "data": [
-        "views/res_partner.xml",
-    ],
+    "data": [],
     "installable": True,
     "auto_install": True,
     "development_status": "Mature",

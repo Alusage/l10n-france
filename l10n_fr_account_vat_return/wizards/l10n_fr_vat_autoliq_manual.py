@@ -50,7 +50,8 @@ class L10nFrVatAutoliqManualLine(models.TransientModel):
     partner_id = fields.Many2one(related="move_line_id.partner_id")
     account_id = fields.Many2one(related="move_line_id.account_id")
     ref = fields.Char(related="move_line_id.move_id.ref")
-    label = fields.Char(related="move_line_id.name")
+    # Odoo 20 retyped account.move.line.name from Char to Text.
+    label = fields.Text(related="move_line_id.name")
     company_currency_id = fields.Many2one(related="move_line_id.company_currency_id")
     debit = fields.Monetary(
         related="move_line_id.debit", currency_field="company_currency_id"
